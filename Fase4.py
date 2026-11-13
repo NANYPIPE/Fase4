@@ -1,5 +1,4 @@
-# Proyecto para la Fase 4 Programación UNAD
-# Sistema para gestionar clientes, servicios y reservas de Software FJ
+# Proyecto Fase 4 UNAD: Sistema Gestión Clientes, Servicios y Reservas
 from abc import ABC, abstractmethod
  # Excepciones personalizadas
 class DatoInvalidoError(Exception):
@@ -11,18 +10,18 @@ class ServicioNoDisponibleError(Exception):
 class ReservaIncorrectaError(Exception):
      def _init_(self, mensaje):
          super()._init_(mensaje)
- # Clase abstracta general EntidadGeneral
+ # Clase abstracta EntidadGeneral
 class EntidadGeneral(ABC):
      @abstractmethod
      def mostrar_informacion(self):
          pass
- # Clase Cliente (hereda de EntidadGeneral)
+ # Clase Cliente
 class Cliente(EntidadGeneral):
      def _init_(self, nombre: str, identificacion: str):
-         self._nombre = nombre
-         self._identificacion = identificacion
          if not nombre.strip() or not identificacion.strip():
              raise DatoInvalidoError("Nombre o identificación no pueden estar vacíos")
+         self._nombre = nombre
+         self._identificacion = identificacion
      def get_nombre(self):
          return self._nombre
      def set_nombre(self, nombre: str):
@@ -42,24 +41,58 @@ class Servicio(ABC):
      @abstractmethod
      def calcular_precio(self):
          pass
- # 1. Clase hija ReservaSalas
+     @abstractmethod
+     def describir_servicio(self):
+         pass
+ # 1. ReservaSalas
 class ReservaSalas(Servicio):
      def _init_(self, horas: float, precio_hora: float):
+         if horas <= 0 or precio_hora <= 0:
+             raise DatoInvalidoError("Horas y precio por hora deben ser mayores a cero")
          self.horas = horas
          self.precio_hora = precio_hora
      def calcular_precio(self):
          return self.horas * self.precio_hora
- # 2. Clase hija AlquilerEquipos
+     def describir_servicio(self):
+         return f"Reserva de sala por {self.horas} horas"
+ # 2. AlquilerEquipos
 class AlquilerEquipos(Servicio):
      def _init_(self, dias: int, precio_dia: float):
+         if dias <= 0 or precio_dia <= 0:
+             raise DatoInvalidoError("Días y precio diario deben ser mayores a cero")
          self.dias = dias
          self.precio_dia = precio_dia
      def calcular_precio(self):
          return self.dias * self.precio_dia
- # 3. Clase hija AsesoriaEspecializada
+     def describir_servicio(self):
+         return f"Alquiler de equipos por {self.dias} días"
+ # 3. AsesoriaEspecializada
 class AsesoriaEspecializada(Servicio):
      def _init_(self, minutos: int, valor_minuto: float):
+         if minutos <= 0 or valor_minuto <= 0:
+             raise DatoInvalidoError("Minutos y valor por minuto deben ser mayores a cero")
          self.minutos = minutos
          self.valor_minuto = valor_minuto
      def calcular_precio(self):
          return self.minutos * self.valor_minuto
+     def describir_servicio(self):
+         return f"Asesoría especializada de {self.minutos} minutos"
+ # ✅ NUEVO: Clase Reserva para Commit 7
+class Reserva:
+     def _init_(self, cliente: Cliente, servicio: Servicio, duracion: float):
+         self.cliente = cliente
+         self.servicio = servicio
+         self.duracion = duracion
+         self.estado = "Pendiente"
+     def confirmar_reserva(self):
+         self.estado = "Confirmada"
+         print("✅ Reserva confirmada")
+     def cancelar_reserva(self):
+         self.estado = "Cancelada"
+         print("❌ Reserva cancelada")
+     def procesar_reserva(self):
+         valor = self.servicio.calcular_precio()
+         print(f"📋 Procesando reserva | Estado: {self.estado}")
+         self.cliente.mostrar_informacion()
+         print(f"🛠️ {self.servicio.describir_servicio()}")
+         print(f"💸 Valor base: ${valor:.2f}")
