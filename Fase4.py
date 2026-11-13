@@ -16,7 +16,7 @@ class EntidadGeneral(ABC):
      @abstractmethod
      def mostrar_informacion(self):
          pass
- # Clase Cliente
+ # Clase Cliente (CONSTRUCTOR _init_ CORREGIDO)
 class Cliente(EntidadGeneral):
      def _init_(self, nombre: str, identificacion: str):
          if not nombre.strip() or not identificacion.strip():
@@ -124,3 +124,95 @@ def registrar_log(mensaje: str):
          print(f"📝 Log registrado: {mensaje}")
      except Exception as e:
          print(f"❌ Error al escribir el log: {e}")
+ # ---------------- BLOQUE PRINCIPAL – 10 OPERACIONES SIMULADAS ----------------
+if __name__ == "_main_":
+     print("===== SISTEMA DE GESTIÓN DE CLIENTES, SERVICIOS Y RESERVAS =====")
+     operaciones = 0
+     r1 = None
+     # Operación 1: Creación correcta de cliente
+     try:
+         c1 = Cliente("María Gómez", "10203040")
+         c1.mostrar_informacion()
+         registrar_log("Operación 1: Cliente María Gómez creado correctamente")
+     except DatoInvalidoError as err:
+         registrar_log(f"Error operación 1: {err}")
+     finally:
+         operaciones += 1
+     # Operación 2: Creación inválida cliente (nombre vacío)
+     try:
+         c2 = Cliente("", "20304050")
+     except DatoInvalidoError as err:
+         registrar_log(f"Error operación 2: {err}")
+     finally:
+         operaciones += 1
+     # Operación 3: Creación correcta servicio ReservaSalas
+     try:
+         s1 = ReservaSalas(4, 15000)
+         registrar_log("Operación 3: Servicio ReservaSalas creado correctamente")
+     except DatoInvalidoError as err:
+         registrar_log(f"Error operación 3: {err}")
+     finally:
+         operaciones += 1
+     # Operación 4: Creación inválida servicio (horas negativas)
+     try:
+         s2 = ReservaSalas(-2, 15000)
+     except DatoInvalidoError as err:
+         registrar_log(f"Error operación 4: {err}")
+     finally:
+         operaciones += 1
+     # Operación 5: Creación correcta AlquilerEquipos
+     try:
+         s3 = AlquilerEquipos(3, 80000)
+         registrar_log("Operación 5: Servicio AlquilerEquipos creado correctamente")
+     except DatoInvalidoError as err:
+         registrar_log(f"Error operación 5: {err}")
+     finally:
+         operaciones += 1
+     # Operación 6: Creación correcta AsesoriaEspecializada
+     try:
+         s4 = AsesoriaEspecializada(60, 2000)
+         registrar_log("Operación 6: Servicio AsesoriaEspecializada creado correctamente")
+     except DatoInvalidoError as err:
+         registrar_log(f"Error operación 6: {err}")
+     finally:
+         operaciones += 1
+     # Operación 7: Crear reserva válida
+     try:
+         r1 = Reserva(c1, s1, 4)
+         r1.procesar_reserva(descuento=0.10, impuesto=0.19)
+         registrar_log("Operación 7: Reserva creada correctamente")
+     except Exception as err:
+         registrar_log(f"Error operación 7: {err}")
+     finally:
+         operaciones += 1
+     # Operación 8: Confirmar reserva
+     try:
+         if r1 is not None:
+             r1.confirmar_reserva()
+         else:
+             registrar_log("No se puede confirmar, la reserva no fue creada")
+     except Exception as err:
+         registrar_log(f"Error operación 8: {err}")
+     finally:
+         operaciones += 1
+     # Operación 9: Cancelar reserva
+     try:
+         if r1 is not None:
+             r1.cancelar_reserva()
+         else:
+             registrar_log("No se puede cancelar, la reserva no fue creada")
+     except Exception as err:
+         registrar_log(f"Error operación 9: {err}")
+     finally:
+         operaciones += 1
+     # Operación 10: Calcular precio con descuento e impuesto
+     try:
+         valor_prueba = s3.calcular_precio(descuento=0.15, impuesto=0.19)
+         print(f"💸 Prueba cálculo precio AlquilerEquipos: ${valor_prueba:.2f}")
+         registrar_log("Operación 10: Cálculo de precio con descuento e impuesto ejecutado")
+     except Exception as err:
+         registrar_log(f"Error operación 10: {err}")
+     finally:
+         operaciones += 1
+     print(f"\n✅ Finalizado: Se ejecutaron {operaciones} operaciones")
+     registrar_log("Ejecución completa del sistema finalizada")
