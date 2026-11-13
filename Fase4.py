@@ -42,3 +42,24 @@ class Servicio(ABC):
      @abstractmethod
      def calcular_precio(self):
          pass
+ # 1. Clase hija ReservaSalas
+class ReservaSalas(Servicio):
+     def _init_(self, horas: float, precio_hora: float):
+         self.horas = horas
+         self.precio_hora = precio_hora
+     def calcular_precio(self):
+         return self.horas * self.precio_hora
+ # 2. Clase hija AlquilerEquipos
+class AlquilerEquipos(Servicio):
+     def _init_(self, dias: int, precio_dia: float):
+         self.dias = dias
+         self.precio_dia = precio_dia
+     def calcular_precio(self):
+         return self.dias * self.precio_dia
+ # 3. Clase hija AsesoriaEspecializada
+class AsesoriaEspecializada(Servicio):
+     def _init_(self, minutos: int, valor_minuto: float):
+         self.minutos = minutos
+         self.valor_minuto = valor_minuto
+     def calcular_precio(self):
+         return self.minutos * self.valor_minuto
