@@ -1,5 +1,6 @@
 # Proyecto Fase 4 UNAD: Sistema Gestión Clientes, Servicios y Reservas
 from abc import ABC, abstractmethod
+import datetime
  # Excepciones personalizadas
 class DatoInvalidoError(Exception):
      def _init_(self, mensaje):
@@ -44,7 +45,7 @@ class Servicio(ABC):
      @abstractmethod
      def describir_servicio(self):
          pass
- # 1. ReservaSalas
+ # ReservaSalas
 class ReservaSalas(Servicio):
      def _init_(self, horas: float, precio_hora: float):
          if horas <= 0 or precio_hora <= 0:
@@ -55,7 +56,7 @@ class ReservaSalas(Servicio):
          return self.horas * self.precio_hora
      def describir_servicio(self):
          return f"Reserva de sala por {self.horas} horas"
- # 2. AlquilerEquipos
+ # AlquilerEquipos
 class AlquilerEquipos(Servicio):
      def _init_(self, dias: int, precio_dia: float):
          if dias <= 0 or precio_dia <= 0:
@@ -66,7 +67,7 @@ class AlquilerEquipos(Servicio):
          return self.dias * self.precio_dia
      def describir_servicio(self):
          return f"Alquiler de equipos por {self.dias} días"
- # 3. AsesoriaEspecializada
+ # AsesoriaEspecializada
 class AsesoriaEspecializada(Servicio):
      def _init_(self, minutos: int, valor_minuto: float):
          if minutos <= 0 or valor_minuto <= 0:
@@ -77,7 +78,7 @@ class AsesoriaEspecializada(Servicio):
          return self.minutos * self.valor_minuto
      def describir_servicio(self):
          return f"Asesoría especializada de {self.minutos} minutos"
- # ✅ NUEVO: Clase Reserva para Commit 7
+ # Clase Reserva
 class Reserva:
      def _init_(self, cliente: Cliente, servicio: Servicio, duracion: float):
          self.cliente = cliente
@@ -86,9 +87,13 @@ class Reserva:
          self.estado = "Pendiente"
      def confirmar_reserva(self):
          self.estado = "Confirmada"
+         mensaje = f"Reserva confirmada para cliente: {self.cliente.get_nombre()}"
+         registrar_log(mensaje)
          print("✅ Reserva confirmada")
      def cancelar_reserva(self):
          self.estado = "Cancelada"
+         mensaje = f"Reserva cancelada para cliente: {self.cliente.get_nombre()}"
+         registrar_log(mensaje)
          print("❌ Reserva cancelada")
      def procesar_reserva(self):
          valor = self.servicio.calcular_precio()
@@ -96,3 +101,14 @@ class Reserva:
          self.cliente.mostrar_informacion()
          print(f"🛠️ {self.servicio.describir_servicio()}")
          print(f"💸 Valor base: ${valor:.2f}")
+ # Función para registrar eventos y errores en el archivo log.txt
+def registrar_log(mensaje: str):
+     """Guarda eventos relevantes y errores dentro del archivo log.txt"""
+     fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+     registro = f"[{fecha_hora}] {mensaje}\n"
+     try:
+         with open("log.txt", "a", encoding="utf-8") as archivo_log:
+             archivo_log.write(registro)
+         print(f"📝 Log registrado: {mensaje}")
+     except Exception as e:
+         print(f"❌ Error al escribir el log: {e}")
