@@ -44,3 +44,8 @@ class Cliente(EntidadGeneral):
      # Sobrescribimos el método abstracto
      def mostrar_informacion(self):
          print(f"Cliente: {self._nombre}, Identificación: {self._identificacion}")
+      from abc import ABC, abstractmethod
+class Servicio(ABC):
+     @abstractmethod
+     def calcular_precio(self):
+         pass
