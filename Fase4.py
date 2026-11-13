@@ -1,6 +1,5 @@
-# Proyecto para la Fase 4 Programación UNAD
- # Sistema para gestionar clientes, servicios y reservas de Software FJ
- # Empezamos importando lo necesario para crear clases abstractas
+# Proyecto para la Fase 4 Programación UNAD
+# Sistema para gestionar clientes, servicios y reservas de Software FJ
 from abc import ABC, abstractmethod
  # Aquí creo mis propias excepciones, para detectar errores
 class DatoInvalidoError(Exception):
@@ -18,10 +17,9 @@ class EntidadGeneral(ABC):
      def mostrar_informacion(self):
          # Este método lo van a usar las demás clases
          pass
-     # Clase Cliente (hereda de EntidadGeneral)
+ # Clase Cliente (hereda de EntidadGeneral)
 class Cliente(EntidadGeneral):
      def _init_(self, nombre: str, identificacion: str):
-         # Encapsulación: atributos protegidos
          self._nombre = nombre
          self._identificacion = identificacion
          # Validación robusta (lanza error si está vacío)
