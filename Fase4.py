@@ -40,7 +40,7 @@ class Cliente(EntidadGeneral):
  # Clase abstracta Servicio
 class Servicio(ABC):
      @abstractmethod
-     def calcular_precio(self):
+     def calcular_precio(self, descuento: float = 0.0, impuesto: float = 0.0):
          pass
      @abstractmethod
      def describir_servicio(self):
@@ -52,8 +52,12 @@ class ReservaSalas(Servicio):
              raise DatoInvalidoError("Horas y precio por hora deben ser mayores a cero")
          self.horas = horas
          self.precio_hora = precio_hora
-     def calcular_precio(self):
-         return self.horas * self.precio_hora
+     def calcular_precio(self, descuento: float = 0.0, impuesto: float = 0.0):
+         valor_base = self.horas * self.precio_hora
+         valor_descuento = valor_base * descuento
+         valor_impuesto = (valor_base - valor_descuento) * impuesto
+         valor_final = valor_base - valor_descuento + valor_impuesto
+         return valor_final
      def describir_servicio(self):
          return f"Reserva de sala por {self.horas} horas"
  # AlquilerEquipos
@@ -63,8 +67,12 @@ class AlquilerEquipos(Servicio):
              raise DatoInvalidoError("Días y precio diario deben ser mayores a cero")
          self.dias = dias
          self.precio_dia = precio_dia
-     def calcular_precio(self):
-         return self.dias * self.precio_dia
+     def calcular_precio(self, descuento: float = 0.0, impuesto: float = 0.0):
+         valor_base = self.dias * self.precio_dia
+         valor_descuento = valor_base * descuento
+         valor_impuesto = (valor_base - valor_descuento) * impuesto
+         valor_final = valor_base - valor_descuento + valor_impuesto
+         return valor_final
      def describir_servicio(self):
          return f"Alquiler de equipos por {self.dias} días"
  # AsesoriaEspecializada
@@ -74,8 +82,12 @@ class AsesoriaEspecializada(Servicio):
              raise DatoInvalidoError("Minutos y valor por minuto deben ser mayores a cero")
          self.minutos = minutos
          self.valor_minuto = valor_minuto
-     def calcular_precio(self):
-         return self.minutos * self.valor_minuto
+     def calcular_precio(self, descuento: float = 0.0, impuesto: float = 0.0):
+         valor_base = self.minutos * self.valor_minuto
+         valor_descuento = valor_base * descuento
+         valor_impuesto = (valor_base - valor_descuento) * impuesto
+         valor_final = valor_base - valor_descuento + valor_impuesto
+         return valor_final
      def describir_servicio(self):
          return f"Asesoría especializada de {self.minutos} minutos"
  # Clase Reserva
@@ -95,12 +107,12 @@ class Reserva:
          mensaje = f"Reserva cancelada para cliente: {self.cliente.get_nombre()}"
          registrar_log(mensaje)
          print("❌ Reserva cancelada")
-     def procesar_reserva(self):
-         valor = self.servicio.calcular_precio()
+     def procesar_reserva(self, descuento: float = 0.0, impuesto: float = 0.0):
+         valor_final = self.servicio.calcular_precio(descuento, impuesto)
          print(f"📋 Procesando reserva | Estado: {self.estado}")
          self.cliente.mostrar_informacion()
          print(f"🛠️ {self.servicio.describir_servicio()}")
-         print(f"💸 Valor base: ${valor:.2f}")
+         print(f"💸 Valor final (descuento + impuesto): ${valor_final:.2f}")
  # Función para registrar eventos y errores en el archivo log.txt
 def registrar_log(mensaje: str):
      """Guarda eventos relevantes y errores dentro del archivo log.txt"""
