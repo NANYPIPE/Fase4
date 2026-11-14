@@ -4,7 +4,7 @@ import datetime
  # Excepciones personalizadas
 class DatoInvalidoError(Exception):
      def _init_(self, mensaje):
-         super()._init_(mensaje)
+         super().__init__(mensaje)
 class ServicioNoDisponibleError(Exception):
      def _init_(self, mensaje):
          super()._init_(mensaje)
@@ -216,3 +216,4 @@ if __name__ == "_main_":
          operaciones += 1
      print(f"\n✅ Finalizado: Se ejecutaron {operaciones} operaciones")
      registrar_log("Ejecución completa del sistema finalizada")
+Corregir super().__init__ en DatoInvalidoError
