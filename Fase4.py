@@ -10,7 +10,7 @@ class ServicioNoDisponibleError(Exception):
          super().__init__(mensaje)
 class ReservaIncorrectaError(Exception):
      def _init_(self, mensaje):
-         super()._init_(mensaje)
+         super().__init__(mensaje)
  # Clase abstracta EntidadGeneral
 class EntidadGeneral(ABC):
      @abstractmethod
@@ -218,3 +218,4 @@ if __name__ == "_main_":
      registrar_log("Ejecución completa del sistema finalizada")
 Corregir super().__init__ en DatoInvalidoError
 Corregir super().__init__ en ServicioNoDisponibleError
+Corregir super().__init__ en ReservaIncorrectaError
