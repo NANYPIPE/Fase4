@@ -77,7 +77,7 @@ class AlquilerEquipos(Servicio):
          return f"Alquiler de equipos por {self.dias} días"
  # AsesoriaEspecializada
 class AsesoriaEspecializada(Servicio):
-     def _init_(self, minutos: int, valor_minuto: float):
+     def __init__(self, minutos: int, valor_minuto: float):
          if minutos <= 0 or valor_minuto <= 0:
              raise DatoInvalidoError("Minutos y valor por minuto deben ser mayores a cero")
          self.minutos = minutos
@@ -222,3 +222,4 @@ Corregir super().__init__ en ServicioNoDisponibleError
 Corregir constructor __init__ en la clase ReservaSalas
 Corregir super().__init__ en ReservaIncorrectaError
 Corregir constructor __init__ en la clase AlquilerEquipos
+Corregir constructor __init__ en la clase AsesoriaEspecializada
