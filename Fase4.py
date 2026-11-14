@@ -3,22 +3,22 @@ from abc import ABC, abstractmethod
 import datetime
  # Excepciones personalizadas
 class DatoInvalidoError(Exception):
-     def _init_(self, mensaje):
-         super()._init_(mensaje)
+     def __init__(self, mensaje):
+         super().__init__(mensaje)
 class ServicioNoDisponibleError(Exception):
-     def _init_(self, mensaje):
-         super()._init_(mensaje)
+     def __init__(self, mensaje):
+         super().__init__(mensaje)
 class ReservaIncorrectaError(Exception):
-     def _init_(self, mensaje):
-         super()._init_(mensaje)
+     def __init__(self, mensaje):
+         super().__init__(mensaje)
  # Clase abstracta EntidadGeneral
 class EntidadGeneral(ABC):
      @abstractmethod
      def mostrar_informacion(self):
          pass
- # Clase Cliente (CONSTRUCTOR _init_ CORREGIDO)
+ # Clase Cliente (CONSTRUCTOR __init__ CORREGIDO)
 class Cliente(EntidadGeneral):
-     def _init_(self, nombre: str, identificacion: str):
+     def __init__(self, nombre: str, identificacion: str):
          if not nombre.strip() or not identificacion.strip():
              raise DatoInvalidoError("Nombre o identificación no pueden estar vacíos")
          self._nombre = nombre
@@ -47,7 +47,7 @@ class Servicio(ABC):
          pass
  # ReservaSalas
 class ReservaSalas(Servicio):
-     def _init_(self, horas: float, precio_hora: float):
+     def __init__(self, horas: float, precio_hora: float):
          if horas <= 0 or precio_hora <= 0:
              raise DatoInvalidoError("Horas y precio por hora deben ser mayores a cero")
          self.horas = horas
@@ -62,7 +62,7 @@ class ReservaSalas(Servicio):
          return f"Reserva de sala por {self.horas} horas"
  # AlquilerEquipos
 class AlquilerEquipos(Servicio):
-     def _init_(self, dias: int, precio_dia: float):
+     def __init__(self, dias: int, precio_dia: float):
          if dias <= 0 or precio_dia <= 0:
              raise DatoInvalidoError("Días y precio diario deben ser mayores a cero")
          self.dias = dias
@@ -77,7 +77,7 @@ class AlquilerEquipos(Servicio):
          return f"Alquiler de equipos por {self.dias} días"
  # AsesoriaEspecializada
 class AsesoriaEspecializada(Servicio):
-     def _init_(self, minutos: int, valor_minuto: float):
+     def __init__(self, minutos: int, valor_minuto: float):
          if minutos <= 0 or valor_minuto <= 0:
              raise DatoInvalidoError("Minutos y valor por minuto deben ser mayores a cero")
          self.minutos = minutos
@@ -92,7 +92,7 @@ class AsesoriaEspecializada(Servicio):
          return f"Asesoría especializada de {self.minutos} minutos"
  # Clase Reserva
 class Reserva:
-     def _init_(self, cliente: Cliente, servicio: Servicio, duracion: float):
+     def __init__(self, cliente: Cliente, servicio: Servicio, duracion: float):
          self.cliente = cliente
          self.servicio = servicio
          self.duracion = duracion
@@ -125,7 +125,7 @@ def registrar_log(mensaje: str):
      except Exception as e:
          print(f"❌ Error al escribir el log: {e}")
  # ---------------- BLOQUE PRINCIPAL – 10 OPERACIONES SIMULADAS ----------------
-if __name__ == "_main_":
+if __name__ == "__main__":
      print("===== SISTEMA DE GESTIÓN DE CLIENTES, SERVICIOS Y RESERVAS =====")
      operaciones = 0
      r1 = None
