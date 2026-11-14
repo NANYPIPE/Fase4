@@ -92,7 +92,7 @@ class AsesoriaEspecializada(Servicio):
          return f"Asesoría especializada de {self.minutos} minutos"
  # Clase Reserva
 class Reserva:
-     def _init_(self, cliente: Cliente, servicio: Servicio, duracion: float):
+     def __init__(self, cliente: Cliente, servicio: Servicio, duracion: float):
          self.cliente = cliente
          self.servicio = servicio
          self.duracion = duracion
@@ -223,3 +223,4 @@ Corregir constructor __init__ en la clase ReservaSalas
 Corregir super().__init__ en ReservaIncorrectaError
 Corregir constructor __init__ en la clase AlquilerEquipos
 Corregir constructor __init__ en la clase AsesoriaEspecializada
+Corregir constructor __init__ en la clase Reserva
