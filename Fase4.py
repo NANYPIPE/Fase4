@@ -47,7 +47,7 @@ class Servicio(ABC):
          pass
  # ReservaSalas
 class ReservaSalas(Servicio):
-     def _init_(self, horas: float, precio_hora: float):
+     def __init__(self, horas: float, precio_hora: float):
          if horas <= 0 or precio_hora <= 0:
              raise DatoInvalidoError("Horas y precio por hora deben ser mayores a cero")
          self.horas = horas
@@ -219,5 +219,6 @@ if __name__ == "_main_":
 Corregir super().__init__ en DatoInvalidoError
 Corregir super().__init__ en ServicioNoDisponibleError
  Corregir constructor __init__ en la class Cliente
+Corregir constructor __init__ en la clase ReservaSalas
 
 Corregir super().__init__ en ReservaIncorrectaError
