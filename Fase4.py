@@ -18,7 +18,7 @@ class EntidadGeneral(ABC):
          pass
  # Clase Cliente (CONSTRUCTOR _init_ CORREGIDO)
 class Cliente(EntidadGeneral):
-     def _init_(self, nombre: str, identificacion: str):
+     def __init__(self, nombre: str, identificacion: str):
          if not nombre.strip() or not identificacion.strip():
              raise DatoInvalidoError("Nombre o identificación no pueden estar vacíos")
          self._nombre = nombre
@@ -218,4 +218,6 @@ if __name__ == "_main_":
      registrar_log("Ejecución completa del sistema finalizada")
 Corregir super().__init__ en DatoInvalidoError
 Corregir super().__init__ en ServicioNoDisponibleError
+ Corregir constructor __init__ en la class Cliente
+
 Corregir super().__init__ en ReservaIncorrectaError
