@@ -124,7 +124,10 @@ def registrar_log(mensaje: str):
          print(f"📝 Log registrado: {mensaje}")
      except Exception as e:
          print(f"❌ Error al escribir el log: {e}")
- # ---------------- BLOQUE PRINCIPAL – 10 OPERACIONES SIMULADAS ----------------
+# ============================================================
+# BLOQUE PRINCIPAL - EJECUCIÓN DEL SISTEMA
+# Aquí se simulan 10 operaciones para probar el sistema
+# ============================================================
 if __name__ == "__main__":
      print("===== SISTEMA DE GESTIÓN DE CLIENTES, SERVICIOS Y RESERVAS =====")
      operaciones = 0
@@ -225,3 +228,4 @@ Corregir constructor __init__ en la class AlquilerEquipos
 Corregir constructor __init__ en la class AsesoriaEspecializada
 Corregir constructor __init__ en la class Reserva
 Corregir __main__ en el bloque principal
+Mejorar comentario explicativo del bloque principal
