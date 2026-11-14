@@ -125,7 +125,7 @@ def registrar_log(mensaje: str):
      except Exception as e:
          print(f"❌ Error al escribir el log: {e}")
  # ---------------- BLOQUE PRINCIPAL – 10 OPERACIONES SIMULADAS ----------------
-if __name__ == "_main_":
+if __name__ == "__main__":
      print("===== SISTEMA DE GESTIÓN DE CLIENTES, SERVICIOS Y RESERVAS =====")
      operaciones = 0
      r1 = None
@@ -219,8 +219,9 @@ if __name__ == "_main_":
 Corregir super().__init__ en DatoInvalidoError
 Corregir super().__init__ en ServicioNoDisponibleError
  Corregir constructor __init__ en la class Cliente
-Corregir constructor __init__ en la clase ReservaSalas
+Corregir constructor __init__ en la class ReservaSalas
 Corregir super().__init__ en ReservaIncorrectaError
-Corregir constructor __init__ en la clase AlquilerEquipos
-Corregir constructor __init__ en la clase AsesoriaEspecializada
-Corregir constructor __init__ en la clase Reserva
+Corregir constructor __init__ en la class AlquilerEquipos
+Corregir constructor __init__ en la class AsesoriaEspecializada
+Corregir constructor __init__ en la class Reserva
+Corregir __main__ en el bloque principal
