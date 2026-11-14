@@ -62,7 +62,7 @@ class ReservaSalas(Servicio):
          return f"Reserva de sala por {self.horas} horas"
  # AlquilerEquipos
 class AlquilerEquipos(Servicio):
-     def _init_(self, dias: int, precio_dia: float):
+     def __init__(self, dias: int, precio_dia: float):
          if dias <= 0 or precio_dia <= 0:
              raise DatoInvalidoError("Días y precio diario deben ser mayores a cero")
          self.dias = dias
@@ -220,5 +220,5 @@ Corregir super().__init__ en DatoInvalidoError
 Corregir super().__init__ en ServicioNoDisponibleError
  Corregir constructor __init__ en la class Cliente
 Corregir constructor __init__ en la clase ReservaSalas
-
 Corregir super().__init__ en ReservaIncorrectaError
+Corregir constructor __init__ en la clase AlquilerEquipos
