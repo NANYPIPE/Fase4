@@ -1,6 +1,10 @@
-# Proyecto Fase 4 UNAD: Sistema Gestión Clientes, Servicios y Reservas
+# ============================================================
+# PROYECTO FASE 4 UNAD: SISTEMA DE GESTIÓN DE CLIENTES,
+# SERVICIOS Y RESERVAS
+# ============================================================
 from abc import ABC, abstractmethod
 import datetime
+
 
 # ==============================================
 # Excepciones personalizadas
@@ -9,13 +13,16 @@ class DatoInvalidoError(Exception):
     def __init__(self, mensaje):
         super().__init__(mensaje)
 
+
 class ServicioNoDisponibleError(Exception):
     def __init__(self, mensaje):
         super().__init__(mensaje)
 
+
 class ReservaIncorrectaError(Exception):
     def __init__(self, mensaje):
         super().__init__(mensaje)
+
 
 # ==============================================
 # Clase abstracta EntidadGeneral
@@ -24,6 +31,7 @@ class EntidadGeneral(ABC):
     @abstractmethod
     def mostrar_informacion(self):
         pass
+
 
 # ==============================================
 # Clase Cliente
@@ -54,6 +62,7 @@ class Cliente(EntidadGeneral):
     def mostrar_informacion(self):
         print(f"Cliente: {self._nombre}, Identificación: {self._identificacion}")
 
+
 # ==============================================
 # Clase abstracta Servicio
 # ==============================================
@@ -65,6 +74,7 @@ class Servicio(ABC):
     @abstractmethod
     def describir_servicio(self):
         pass
+
 
 # ==============================================
 # Servicio: Reserva de Salas
@@ -80,11 +90,11 @@ class ReservaSalas(Servicio):
         valor_base = self.horas * self.precio_hora
         valor_descuento = valor_base * descuento
         valor_impuesto = (valor_base - valor_descuento) * impuesto
-        valor_final = valor_base - valor_descuento + valor_impuesto
-        return valor_final
+        return valor_base - valor_descuento + valor_impuesto
 
     def describir_servicio(self):
         return f"Reserva de sala por {self.horas} horas"
+
 
 # ==============================================
 # Servicio: Alquiler de Equipos
@@ -100,11 +110,11 @@ class AlquilerEquipos(Servicio):
         valor_base = self.dias * self.precio_dia
         valor_descuento = valor_base * descuento
         valor_impuesto = (valor_base - valor_descuento) * impuesto
-        valor_final = valor_base - valor_descuento + valor_impuesto
-        return valor_final
+        return valor_base - valor_descuento + valor_impuesto
 
     def describir_servicio(self):
         return f"Alquiler de equipos por {self.dias} días"
+
 
 # ==============================================
 # Servicio: Asesoría Especializada
@@ -120,11 +130,11 @@ class AsesoriaEspecializada(Servicio):
         valor_base = self.minutos * self.valor_minuto
         valor_descuento = valor_base * descuento
         valor_impuesto = (valor_base - valor_descuento) * impuesto
-        valor_final = valor_base - valor_descuento + valor_impuesto
-        return valor_final
+        return valor_base - valor_descuento + valor_impuesto
 
     def describir_servicio(self):
         return f"Asesoría especializada de {self.minutos} minutos"
+
 
 # ==============================================
 # Clase Reserva
@@ -155,6 +165,7 @@ class Reserva:
         print(f"🛠️ {self.servicio.describir_servicio()}")
         print(f"💸 Valor final (descuento + impuesto): ${valor_final:.2f}")
 
+
 # ==============================================
 # Función para registrar eventos en log.txt
 # ==============================================
@@ -169,144 +180,215 @@ def registrar_log(mensaje: str):
     except Exception as e:
         print(f"❌ Error al escribir el log: {e}")
 
+
 # ============================================================
-# BLOQUE PRINCIPAL - EJECUCIÓN AUTOMÁTICA DEL SISTEMA
-# Este bloque demuestra el funcionamiento completo del sistema
-# mediante 10 operaciones de prueba predefinidas, sin entrada del usuario.
-# Se crean clientes, servicios y reservas; se validan casos correctos
-# y manejo de errores; y todo queda registrado en log.txt
+# MENÚ INTERACTIVO - El usuario elige qué hacer
+# ============================================================
+def menu_principal():
+    """
+    Menú interactivo que permite al usuario elegir qué operación realizar.
+    Corrige la observación del tutor sobre la falta de interacción.
+    """
+    clientes = []
+    servicios = []
+    reservas = []
+
+    while True:
+        print("\n" + "=" * 55)
+        print("   SISTEMA DE GESTIÓN DE CLIENTES, SERVICIOS Y RESERVAS")
+        print("=" * 55)
+        print("1. Crear cliente")
+        print("2. Crear servicio")
+        print("3. Crear reserva")
+        print("4. Confirmar reserva")
+        print("5. Cancelar reserva")
+        print("6. Procesar reserva (calcular precio)")
+        print("7. Ver clientes")
+        print("8. Ver servicios")
+        print("9. Ver reservas")
+        print("10. Salir")
+        print("=" * 55)
+
+        opcion = input("Elija una opción (1-10): ").strip()
+
+        # ----- OPCIÓN 1: CREAR CLIENTE -----
+        if opcion == "1":
+            try:
+                nombre = input("Ingrese el nombre del cliente: ").strip()
+                identificacion = input("Ingrese la identificación: ").strip()
+                cliente = Cliente(nombre, identificacion)
+                clientes.append(cliente)
+                registrar_log(f"Cliente creado: {nombre} ({identificacion})")
+                print("✅ Cliente creado exitosamente.")
+            except DatoInvalidoError as e:
+                registrar_log(f"Error al crear cliente: {e}")
+                print(f"❌ Error: {e}")
+
+        # ----- OPCIÓN 2: CREAR SERVICIO -----
+        elif opcion == "2":
+            print("\nTipos de servicio:")
+            print("  1. Reserva de salas")
+            print("  2. Alquiler de equipos")
+            print("  3. Asesoría especializada")
+            tipo = input("Elija el tipo de servicio (1-3): ").strip()
+
+            try:
+                if tipo == "1":
+                    horas = float(input("Ingrese las horas: "))
+                    precio_hora = float(input("Ingrese el precio por hora: "))
+                    servicio = ReservaSalas(horas, precio_hora)
+                    servicios.append(servicio)
+                    registrar_log(f"Servicio creado: ReservaSalas ({horas} horas)")
+                    print("✅ Servicio de reserva de salas creado.")
+
+                elif tipo == "2":
+                    dias = int(input("Ingrese los días: "))
+                    precio_dia = float(input("Ingrese el precio por día: "))
+                    servicio = AlquilerEquipos(dias, precio_dia)
+                    servicios.append(servicio)
+                    registrar_log(f"Servicio creado: AlquilerEquipos ({dias} días)")
+                    print("✅ Servicio de alquiler de equipos creado.")
+
+                elif tipo == "3":
+                    minutos = int(input("Ingrese los minutos: "))
+                    valor_minuto = float(input("Ingrese el valor por minuto: "))
+                    servicio = AsesoriaEspecializada(minutos, valor_minuto)
+                    servicios.append(servicio)
+                    registrar_log(f"Servicio creado: AsesoriaEspecializada ({minutos} minutos)")
+                    print("✅ Servicio de asesoría creado.")
+
+                else:
+                    print("❌ Opción inválida.")
+            except ValueError:
+                print("❌ Error: debe ingresar valores numéricos válidos.")
+            except DatoInvalidoError as e:
+                registrar_log(f"Error al crear servicio: {e}")
+                print(f"❌ Error: {e}")
+
+        # ----- OPCIÓN 3: CREAR RESERVA -----
+        elif opcion == "3":
+            if not clientes or not servicios:
+                print("❌ Debe crear al menos un cliente y un servicio primero.")
+                continue
+
+            print("\nClientes disponibles:")
+            for i, c in enumerate(clientes, 1):
+                print(f"  {i}. {c.get_nombre()} ({c.get_identificacion()})")
+            try:
+                idx_cliente = int(input("Elija el cliente (número): ")) - 1
+                if idx_cliente < 0 or idx_cliente >= len(clientes):
+                    print("❌ Cliente inválido.")
+                    continue
+
+                print("\nServicios disponibles:")
+                for i, s in enumerate(servicios, 1):
+                    print(f"  {i}. {s.describir_servicio()}")
+                idx_servicio = int(input("Elija el servicio (número): ")) - 1
+                if idx_servicio < 0 or idx_servicio >= len(servicios):
+                    print("❌ Servicio inválido.")
+                    continue
+
+                reserva = Reserva(clientes[idx_cliente], servicios[idx_servicio])
+                reservas.append(reserva)
+                registrar_log(f"Reserva creada para {clientes[idx_cliente].get_nombre()}")
+                print("✅ Reserva creada exitosamente.")
+            except ValueError:
+                print("❌ Error: debe ingresar valores numéricos válidos.")
+
+        # ----- OPCIÓN 4: CONFIRMAR RESERVA -----
+        elif opcion == "4":
+            if not reservas:
+                print("❌ No hay reservas para confirmar.")
+                continue
+            print("\nReservas disponibles:")
+            for i, r in enumerate(reservas, 1):
+                print(f"  {i}. {r.cliente.get_nombre()} - {r.servicio.describir_servicio()} [{r.estado}]")
+            try:
+                idx = int(input("Elija la reserva (número): ")) - 1
+                if 0 <= idx < len(reservas):
+                    reservas[idx].confirmar_reserva()
+                else:
+                    print("❌ Reserva inválida.")
+            except ValueError:
+                print("❌ Error: debe ingresar un número válido.")
+
+        # ----- OPCIÓN 5: CANCELAR RESERVA -----
+        elif opcion == "5":
+            if not reservas:
+                print("❌ No hay reservas para cancelar.")
+                continue
+            print("\nReservas disponibles:")
+            for i, r in enumerate(reservas, 1):
+                print(f"  {i}. {r.cliente.get_nombre()} - {r.servicio.describir_servicio()} [{r.estado}]")
+            try:
+                idx = int(input("Elija la reserva (número): ")) - 1
+                if 0 <= idx < len(reservas):
+                    reservas[idx].cancelar_reserva()
+                else:
+                    print("❌ Reserva inválida.")
+            except ValueError:
+                print("❌ Error: debe ingresar un número válido.")
+
+        # ----- OPCIÓN 6: PROCESAR RESERVA -----
+        elif opcion == "6":
+            if not reservas:
+                print("❌ No hay reservas para procesar.")
+                continue
+            print("\nReservas disponibles:")
+            for i, r in enumerate(reservas, 1):
+                print(f"  {i}. {r.cliente.get_nombre()} - {r.servicio.describir_servicio()} [{r.estado}]")
+            try:
+                idx = int(input("Elija la reserva (número): ")) - 1
+                if 0 <= idx < len(reservas):
+                    descuento = float(input("Ingrese descuento (0-1): ") or 0)
+                    impuesto = float(input("Ingrese impuesto (0-1): ") or 0)
+                    reservas[idx].procesar_reserva(descuento, impuesto)
+                else:
+                    print("❌ Reserva inválida.")
+            except ValueError:
+                print("❌ Error: debe ingresar valores numéricos válidos.")
+
+        # ----- OPCIÓN 7: VER CLIENTES -----
+        elif opcion == "7":
+            if not clientes:
+                print("❌ No hay clientes registrados.")
+            else:
+                print("\n📋 Clientes registrados:")
+                for c in clientes:
+                    c.mostrar_informacion()
+
+        # ----- OPCIÓN 8: VER SERVICIOS -----
+        elif opcion == "8":
+            if not servicios:
+                print("❌ No hay servicios registrados.")
+            else:
+                print("\n📋 Servicios registrados:")
+                for s in servicios:
+                    print(f"  - {s.describir_servicio()}")
+
+        # ----- OPCIÓN 9: VER RESERVAS -----
+        elif opcion == "9":
+            if not reservas:
+                print("❌ No hay reservas registradas.")
+            else:
+                print("\n📋 Reservas registradas:")
+                for i, r in enumerate(reservas, 1):
+                    print(f"  {i}. Cliente: {r.cliente.get_nombre()} | "
+                          f"Servicio: {r.servicio.describir_servicio()} | "
+                          f"Estado: {r.estado}")
+
+        # ----- OPCIÓN 10: SALIR -----
+        elif opcion == "10":
+            print("\n👋 Saliendo del sistema... ¡Hasta luego!")
+            registrar_log("Sistema cerrado por el usuario.")
+            break
+
+        else:
+            print("❌ Opción inválida. Por favor, elija una opción del 1 al 10.")
+
+
+# ============================================================
+# PUNTO DE ENTRADA
 # ============================================================
 if __name__ == "__main__":
-    print("=" * 60)
-    print("     SISTEMA DE GESTIÓN DE CLIENTES, SERVICIOS Y RESERVAS")
-    print("                Fase 4 — Ejecución automática")
-    print("=" * 60)
-
-    operaciones = 0
-    r1 = None
-
-    # Operación 1: Creación correcta de cliente
-    try:
-        print("\n--- Operación 1: Crear cliente válido ---")
-        c1 = Cliente("María Gómez", "10203040")
-        c1.mostrar_informacion()
-        registrar_log("Operación 1: Cliente María Gómez creado correctamente")
-    except DatoInvalidoError as err:
-        print(f"❌ Error: {err}")
-        registrar_log(f"Error operación 1: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 2: Creación inválida cliente (nombre vacío)
-    try:
-        print("\n--- Operación 2: Intentar crear cliente con nombre vacío ---")
-        c2 = Cliente("", "20304050")
-    except DatoInvalidoError as err:
-        print(f"❌ Error capturado: {err}")
-        registrar_log(f"Error operación 2: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 3: Creación correcta servicio ReservaSalas
-    try:
-        print("\n--- Operación 3: Crear servicio ReservaSalas ---")
-        s1 = ReservaSalas(4, 15000)
-        print(f"✅ {s1.describir_servicio()} creado")
-        registrar_log("Operación 3: Servicio ReservaSalas creado correctamente")
-    except DatoInvalidoError as err:
-        print(f"❌ Error: {err}")
-        registrar_log(f"Error operación 3: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 4: Creación inválida servicio (horas negativas)
-    try:
-        print("\n--- Operación 4: Intentar crear servicio con horas negativas ---")
-        s2 = ReservaSalas(-2, 15000)
-    except DatoInvalidoError as err:
-        print(f"❌ Error capturado: {err}")
-        registrar_log(f"Error operación 4: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 5: Creación correcta AlquilerEquipos
-    try:
-        print("\n--- Operación 5: Crear servicio AlquilerEquipos ---")
-        s3 = AlquilerEquipos(3, 80000)
-        print(f"✅ {s3.describir_servicio()} creado")
-        registrar_log("Operación 5: Servicio AlquilerEquipos creado correctamente")
-    except DatoInvalidoError as err:
-        print(f"❌ Error: {err}")
-        registrar_log(f"Error operación 5: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 6: Creación correcta AsesoriaEspecializada
-    try:
-        print("\n--- Operación 6: Crear servicio Asesoría Especializada ---")
-        s4 = AsesoriaEspecializada(60, 2000)
-        print(f"✅ {s4.describir_servicio()} creado")
-        registrar_log("Operación 6: Servicio AsesoriaEspecializada creado correctamente")
-    except DatoInvalidoError as err:
-        print(f"❌ Error: {err}")
-        registrar_log(f"Error operación 6: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 7: Crear reserva válida
-    try:
-        print("\n--- Operación 7: Crear y procesar reserva ---")
-        r1 = Reserva(c1, s1)
-        r1.procesar_reserva(descuento=0.10, impuesto=0.19)
-        registrar_log("Operación 7: Reserva creada correctamente")
-    except Exception as err:
-        print(f"❌ Error: {err}")
-        registrar_log(f"Error operación 7: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 8: Confirmar reserva
-    try:
-        print("\n--- Operación 8: Confirmar reserva ---")
-        if r1 is not None:
-            r1.confirmar_reserva()
-        else:
-            print("⚠️ No se puede confirmar, la reserva no fue creada")
-            registrar_log("No se puede confirmar, la reserva no fue creada")
-    except Exception as err:
-        print(f"❌ Error: {err}")
-        registrar_log(f"Error operación 8: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 9: Cancelar reserva
-    try:
-        print("\n--- Operación 9: Cancelar reserva ---")
-        if r1 is not None:
-            r1.cancelar_reserva()
-        else:
-            print("⚠️ No se puede cancelar, la reserva no fue creada")
-            registrar_log("No se puede cancelar, la reserva no fue creada")
-    except Exception as err:
-        print(f"❌ Error: {err}")
-        registrar_log(f"Error operación 9: {err}")
-    finally:
-        operaciones += 1
-
-    # Operación 10: Calcular precio con descuento e impuesto
-    try:
-        print("\n--- Operación 10: Calcular precio con descuento e impuesto ---")
-        valor_prueba = s3.calcular_precio(descuento=0.15, impuesto=0.19)
-        print(f"💸 Prueba cálculo precio AlquilerEquipos: ${valor_prueba:.2f}")
-        registrar_log("Operación 10: Cálculo de precio con descuento e impuesto ejecutado")
-    except Exception as err:
-        print(f"❌ Error: {err}")
-        registrar_log(f"Error operación 10: {err}")
-    finally:
-        operaciones += 1
-
-    # Resumen final
-    print("\n" + "=" * 60)
-    print(f"✅ FINALIZADO: Se ejecutaron {operaciones} operaciones correctamente")
-    print("=" * 60)
-    registrar_log("Ejecución completa del sistema finalizada")
+    menu_principal()
